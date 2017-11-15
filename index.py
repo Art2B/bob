@@ -102,5 +102,5 @@ def scheduledScript(sc, year):
   else:
     print('End of this world iteration')
 
-s.enter(config['main']['scFrequency'], 1, scheduledScript, (s, 1568))
+s.enter(config['main']['scFrequency'], 1, scheduledScript, (s, config["main"]["startingYear"]))
 s.run()
