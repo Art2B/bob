@@ -5,6 +5,7 @@
   },
   "formatting": {
     "typesHandled": ["events", "births", "deaths", "nobel prizes"],
-    "switcher": { "deaths": "Death of ", "births": "Birth of " }
+    "switcher": { "deaths": "Death of ", "births": "Birth of " },
+    "noDay": "Year "
   }
 }

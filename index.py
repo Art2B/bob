@@ -49,7 +49,7 @@ def getFormattedDate (text):
   if date:
     date = date.group(2) + " " + date.group(1) + " " + str(year)
   else:
-    date = str(year)
+    date = config['formatting']['noDay'] + str(year)
   return date
 
 def getEventsFromMultilineDate ( eventType, dateText ):
