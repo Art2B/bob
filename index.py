@@ -10,7 +10,9 @@ from TwitterAPI import TwitterAPI
 with open('config.json', 'r') as f:
   config = json.load(f)
 
-currentYear = date.today().year + 1
+api = TwitterAPI(config["twitter"]["consumer_key"], config["twitter"]["consumer_secret"], config["twitter"]["access_token_key"], config["twitter"]["access_token_secret"])
+currentYear = 1568
+# currentYear = date.today().year + 1
 
 def eventTypeToString(argument):
   return config['formatting']['switcher'].get(argument, "")
@@ -36,6 +38,8 @@ def getFormattedEvent (eventType, date, eventText):
   event = re.sub(r"\{{2}(.+?)\|.+?\}{2}", r"\1", event)
   # Remove all [[...]] from links
   event = re.sub(r"\[{2}(.+?)\]{2}", r"\1", event)
+  # Remove html chars
+  event = re.sub(r"&.+?;(\s| )", "", event)
   # Remove remaining tokens
   event = event.replace("[[", "")
   event = event.replace("]]", "")
@@ -84,22 +88,19 @@ def formatData ( data, year ):
       # Format single lined events
       singlelineEvent = re.findall("^\* (.+?)$", eventData, re.M)
       for el in singlelineEvent:
-        events.append(getFormattedEvent( eventType, getFormattedDate(el, year), re.sub(r"^\[{2}[a-zA-Z]*?\s[0-9]+\]{2}\s–\s", "", el)))
+        events.append(getFormattedEvent( eventType, getFormattedDate(el, year), re.sub(r"^\[{2}[a-zA-Z]*?\s[0-9]+\]{2}((\s|)–(\s|)|(\s|)&.+?;(\s|))", "", el)))
   return events
 
 
 s = sched.scheduler(time.time, time.sleep)
 def scheduledScript(sc, year):
   if year <= currentYear:
-    print('Current year: ' + str(year))
     event = random.choice(formatData(getYearData(year), year))
-    print(event)
-
-
+    r = api.request('statuses/update', {'status': event[:config["twitter"]["maxChars"]]})
     year = year + 1
     s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, year))  
   else:
     print('End of this world iteration')
 
-s.enter(config['main']['scFrequency'], 1, scheduledScript, (s, 149))
+s.enter(config['main']['scFrequency'], 1, scheduledScript, (s, 1568))
 s.run()
