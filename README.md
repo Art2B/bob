@@ -11,8 +11,8 @@ A python iot project who makes you learn history events from Wikipedia via Twitt
 ### Dependencies
 
   - Python 2.7.3 or older
-  - 'requests' module
-  - 'TwitterAPI' module
+  - `requests` module
+  - `TwitterAPI` module
 
 ## Licence
 
