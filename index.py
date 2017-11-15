@@ -90,13 +90,13 @@ def formatData ( data, year ):
       for el in singlelineEvent:
         events.append(getFormattedEvent( eventType, getFormattedDate(el, year), re.sub(r"^\[{2}[a-zA-Z]*?\s[0-9]+\]{2}((\s|)–(\s|)|(\s|)&.+?;(\s|))", "", el)))
   return events
-
-
+ 
 s = sched.scheduler(time.time, time.sleep)
 def scheduledScript(sc, year):
   if year <= currentYear:
     event = random.choice(formatData(getYearData(year), year))
-    r = api.request('statuses/update', {'status': event[:config["twitter"]["maxChars"]]})
+    if config["main"]["localMode"] == False:
+      r = api.request('statuses/update', {'status': event[:config["twitter"]["maxChars"]]})
     year = year + 1
     s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, year))  
   else:

@@ -1,7 +1,8 @@
 {
   "main": {
     "scFrequency": 10,
-    "startingYear": 1
+    "startingYear": 1,
+    "localMode": false
   },
   "api": {
     "endpoint": "https://en.wikipedia.org/w/api.php",
