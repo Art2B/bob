@@ -4,12 +4,13 @@ A python iot project who makes you learn history events from Wikipedia via Twitt
 
 ## Installation
   - Clone project
-  - `pip install requests`
+  - Intall dependencies
   - `python index.py`
 
-### Requierements
+### Dependencies
 
   - Python 2.7.3 or older
+  - 'requests' module
 
 ## Licence
 

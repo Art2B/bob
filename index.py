@@ -3,22 +3,18 @@ import requests
 import json
 import re
 
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
 #LOG FOR DEV PURPOSES
 logFile = open('results.log', 'w')
-eventTypesHandled = ['events', 'births', 'deaths', 'nobel prizes']
 year = 1932
 
 def eventTypeToString(argument):
-    switcher = {
-        "deaths": "Death of ",
-        "births": "Birth of "
-    }
-    return switcher.get(argument, "")
+    return config['formatting']['switcher'].get(argument, "")
 
 def getYearData ( year ):
-  wikiEndpoint = "https://en.wikipedia.org/w/api.php"
-  urlParams = "?action=query&prop=revisions&rvprop=content&format=json&titles="
-  r = requests.get(wikiEndpoint + urlParams + str(year))
+  r = requests.get(config['api']['endpoint'] + config['api']['urlParams'] + str(year))
   data = json.loads(r.text)['query']['pages']
   data = data[next(iter(data))]['revisions'][0]['*']
   return data
@@ -74,7 +70,7 @@ def formatData ( data ):
     eventType = match[0].replace("=", "").lower()
     eventData = re.sub(re.compile("^(?!\*)(.*)$", re.M), '', match[1])
 
-    if any(eventType in s for s in eventTypesHandled):
+    if any(eventType in s for s in config['formatting']['typesHandled']):
       # Format multiline date events
       multilineRegex = re.compile("(?P<full_match>^\*{1} (.*)\n(^\*{2}(.*?)\n)+)", re.M)
       multilineDates = re.findall(multilineRegex, eventData)
@@ -91,7 +87,6 @@ def formatData ( data ):
 
 # Get and format data
 eventList = formatData(getYearData(year))
-print(str(len(eventList)) + " events so far for " + str(year))
 
 for item in eventList:
   logFile.write("%s\n" % item)
