@@ -1,4 +1,7 @@
 {
+  "main": {
+    "scFrequency": 10
+  },
   "api": {
     "endpoint": "https://en.wikipedia.org/w/api.php",
     "urlParams": "?action=query&prop=revisions&rvprop=content&format=json&redirects&titles=AD_"
