@@ -8,10 +8,10 @@ with open('config.json', 'r') as f:
 
 #LOG FOR DEV PURPOSES
 logFile = open('results.log', 'w')
-year = 1932
+year = 1
 
 def eventTypeToString(argument):
-    return config['formatting']['switcher'].get(argument, "")
+  return config['formatting']['switcher'].get(argument, "")
 
 def getYearData ( year ):
   r = requests.get(config['api']['endpoint'] + config['api']['urlParams'] + str(year))
@@ -62,12 +62,12 @@ def getEventsFromMultilineDate ( eventType, dateText ):
 
 def formatData ( data ):
   events = []
-  #Remove mounth from text
-  data = re.sub(re.compile("(^={3}[a-zA-Z\s]*={3}$)", re.M), "", data)
+  #Remove sub categories from text
+  data = re.sub(re.compile("(^={3,}[a-zA-Z\s]*={3,}$)", re.M), "", data)
   # Sort by events types
   results = re.findall("(^={2}[a-zA-Z\s]*={2}$)(.*?)(?=(?:^={2}[a-zA-Z\s]*={2}$)|\Z)", data, re.S|re.M)
   for match in results:
-    eventType = match[0].replace("=", "").lower()
+    eventType = match[0].replace("=", "").replace(" ", "").lower()
     eventData = re.sub(re.compile("^(?!\*)(.*)$", re.M), '', match[1])
 
     if any(eventType in s for s in config['formatting']['typesHandled']):

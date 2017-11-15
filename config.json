@@ -1,7 +1,7 @@
 {
   "api": {
     "endpoint": "https://en.wikipedia.org/w/api.php",
-    "urlParams": "?action=query&prop=revisions&rvprop=content&format=json&titles="
+    "urlParams": "?action=query&prop=revisions&rvprop=content&format=json&redirects&titles=AD_"
   },
   "formatting": {
     "typesHandled": ["events", "births", "deaths", "nobel prizes"],
