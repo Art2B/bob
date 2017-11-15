@@ -6,6 +6,12 @@
     "endpoint": "https://en.wikipedia.org/w/api.php",
     "urlParams": "?action=query&prop=revisions&rvprop=content&format=json&redirects&titles=AD_"
   },
+  "twitter": {
+    "consumer_key": "XXX",
+    "consumer_secret": "XXX",
+    "access_token_key": "XXX",
+    "access_token_secret": "XXX"
+  },
   "formatting": {
     "typesHandled": ["events", "births", "deaths", "nobel prizes"],
     "switcher": { "deaths": "Death of ", "births": "Birth of " },

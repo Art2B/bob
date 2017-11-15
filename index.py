@@ -5,6 +5,7 @@ import json
 import re
 import sched
 import time
+from TwitterAPI import TwitterAPI
 
 with open('config.json', 'r') as f:
   config = json.load(f)
@@ -91,9 +92,10 @@ s = sched.scheduler(time.time, time.sleep)
 def scheduledScript(sc, year):
   if year <= currentYear:
     print('Current year: ' + str(year))
-    logFile = open('results.log', 'a')
-    logFile.write("%s\n" % random.choice(formatData(getYearData(year), year)))
-    logFile.close()
+    event = random.choice(formatData(getYearData(year), year))
+    print(event)
+
+
     year = year + 1
     s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, year))  
   else:
