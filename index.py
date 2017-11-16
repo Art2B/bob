@@ -65,8 +65,10 @@ def scheduledScript(sc, year):
   else:
     print('End of this world iteration')
     currentIteration = Iteration.select().order_by(Iteration.begin_at.desc()).get()
+    # Save end datetime of current iteration
     currentIteration.end_at = datetime.now()
     currentIteration.save()
+    # Create new iteration
     newIterationNumber = currentIteration.number + 1
     Iteration(number=newIterationNumber, begin_at=datetime.now()).save()
     s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, config["main"]["startingYear"]))
