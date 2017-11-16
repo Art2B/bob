@@ -73,6 +73,14 @@ def scheduledScript(sc, year):
     Iteration(number=newIterationNumber, begin_at=datetime.now()).save()
     s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, config["main"]["startingYear"]))
 
+# Retrieve starting year at launch and allow script to start where it stops
+if Event.select().count() > 0:
+  lastIteration = Iteration.select().order_by(Iteration.begin_at.desc()).get()
+  lastEvent = Event.select(Event, Iteration).join(Iteration).where(Event.iteration == lastIteration).order_by(Event.date.desc()).get()
+  startingYear = lastEvent.date.year + 1
+else:
+  startingYear = config["main"]["startingYear"]
+
 s = sched.scheduler(time.time, time.sleep)
-s.enter(config['main']['scFrequency'], 1, scheduledScript, (s, config["main"]["startingYear"]))
+s.enter(config['main']['scFrequency'], 1, scheduledScript, (s, startingYear))
 s.run()

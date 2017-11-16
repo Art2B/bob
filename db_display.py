@@ -1,4 +1,5 @@
 # This file is useless for now. But it store scripts and stuff to display infos from the database. I'm gonna look for it later to make this better :)
+# Please do not run this file for now, you'll get errors
 
 itertationList = Iteration.select()
 eventList = Event.select(Event, Iteration).join(Iteration)
