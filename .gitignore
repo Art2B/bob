@@ -1,2 +1,8 @@
-*.log
 config.json
+
+# Don't push database & log files
+*.db
+*.log
+
+# Don't push db cache
+__pycache__

@@ -13,6 +13,7 @@ A python iot project who makes you learn history events from Wikipedia via Twitt
   - Python 2.7.3 or older
   - `requests` module
   - `TwitterAPI` module
+  - `peewee` module
 
 ## Licence
 
