@@ -16,6 +16,8 @@ db = SqliteDatabase('iterations.db')
 class Iteration(Model):
   number = IntegerField()
   begin_at = DateTimeField()
+  end_at = DateTimeField(null=True)
+  colorCode = CharField(null=True)
   class Meta:
     database = db
 
@@ -23,7 +25,8 @@ class Event(Model):
   iteration = ForeignKeyField(Iteration, related_name='events')
   date = DateTimeField()
   text = TextField()
-  tweet_url = TextField()
+  tweet_url = TextField(null=True)
+  tweeted_at = DateTimeField(null=True)
   class Meta:
     database = db
 
@@ -46,8 +49,6 @@ def scheduledScript(sc, year):
     event = getEventFromYear(year)
     currentIteration = Iteration.select().order_by(Iteration.begin_at.desc()).get()
 
-    print(event['text'])
-
     # Tweet the event if localMode is false in config
     if config["main"]["localMode"] == False:
       r = api.request('statuses/update', {'status': event[:config["twitter"]["maxChars"]]})
@@ -55,8 +56,7 @@ def scheduledScript(sc, year):
     Event(
       iteration = currentIteration,
       date = event['date'],
-      text = event['text'],
-      tweet_url = 'WE NEED TO FILL THIS MODAFAKA'
+      text = event['text']
     ).save()
 
     # Increment year for next iteration
@@ -64,7 +64,10 @@ def scheduledScript(sc, year):
     s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, year))
   else:
     print('End of this world iteration')
-    newIterationNumber = Iteration.select().order_by(Iteration.begin_at.desc()).get().number + 1
+    currentIteration = Iteration.select().order_by(Iteration.begin_at.desc()).get()
+    currentIteration.end_at = datetime.now()
+    currentIteration.save()
+    newIterationNumber = currentIteration.number + 1
     Iteration(number=newIterationNumber, begin_at=datetime.now()).save()
     s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, config["main"]["startingYear"]))
 
