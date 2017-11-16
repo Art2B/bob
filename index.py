@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 import json
 import sched
 import time
@@ -36,16 +36,37 @@ api = TwitterAPI(config["twitter"]["consumer_key"], config["twitter"]["consumer_
 # Set the current year
 currentYear = date.today().year + 1
 
+# Check if there is iterations in db and create one if not
+if Iteration.select().count() == 0:
+  print("Creating first iteration")
+  Iteration(number=1, begin_at=datetime.now()).save()
+
 def scheduledScript(sc, year):
   if year <= currentYear:
     event = getEventFromYear(year)
+    currentIteration = Iteration.select().order_by(Iteration.begin_at.desc()).get()
 
+    print(event['text'])
+
+    # Tweet the event if localMode is false in config
     if config["main"]["localMode"] == False:
       r = api.request('statuses/update', {'status': event[:config["twitter"]["maxChars"]]})
+    
+    Event(
+      iteration = currentIteration,
+      date = event['date'],
+      text = event['text'],
+      tweet_url = 'WE NEED TO FILL THIS MODAFAKA'
+    ).save()
+
+    # Increment year for next iteration
     year = year + 1
-    s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, year))  
+    s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, year))
   else:
     print('End of this world iteration')
+    newIterationNumber = Iteration.select().order_by(Iteration.begin_at.desc()).get().number + 1
+    Iteration(number=newIterationNumber, begin_at=datetime.now()).save()
+    s.enter(config['main']['scFrequency'], 1, scheduledScript, (sc, config["main"]["startingYear"]))
 
 s = sched.scheduler(time.time, time.sleep)
 s.enter(config['main']['scFrequency'], 1, scheduledScript, (s, config["main"]["startingYear"]))

@@ -1,11 +1,15 @@
+import datetime
 import random
 import requests
 import json
 import re
+from helpers import month_string_to_number
 
 # Open config file
 with open('config.json', 'r') as f:
   config = json.load(f)
+
+dateRegex = re.compile("^\[{2}([a-zA-Z]*?) ([0-9]+)\]{2}", re.M)
 
 def eventTypeToString(argument):
   return config['formatting']['switcher'].get(argument, "")
@@ -40,8 +44,17 @@ def getFormattedEvent (eventType, date, eventText):
   event = event.replace("  ", " ")
   return event
 
+def getEventDatetime(text, year):
+  dateReResults = re.search(dateRegex, text)
+  if dateReResults:
+    month = month_string_to_number(dateReResults.group(1))
+    day = dateReResults.group(2)
+  else:
+    month = 1
+    day = 1
+  return datetime.date(int(year), int(month), int(day))
+
 def getFormattedDate (text, year):
-  dateRegex = re.compile("^\[{2}([a-zA-Z]*?) ([0-9]+)\]{2}", re.M)
   # Get data from text
   date = re.search(dateRegex, text)
   # Format date depending on regex match
@@ -56,7 +69,11 @@ def getEventsFromMultilineDate ( eventType, dateText, year):
   events = re.findall("^\*{2}(.*)$", dateText[0], re.M)
   formattedEventsList = []
   for event in events:
-    formattedEventsList.append(getFormattedEvent(eventType, date, event))
+    eventText = getFormattedEvent(eventType, date, event)
+    formattedEventsList.append({
+      'date': getEventDatetime(eventText, year),
+      'text': eventText
+    })
   return formattedEventsList
 
 def formatData ( data, year ):
@@ -81,7 +98,10 @@ def formatData ( data, year ):
       # Format single lined events
       singlelineEvent = re.findall("^\* (.+?)$", eventData, re.M)
       for el in singlelineEvent:
-        events.append(getFormattedEvent( eventType, getFormattedDate(el, year), re.sub(r"^\[{2}[a-zA-Z]*?\s[0-9]+\]{2}((\s|)–(\s|)|(\s|)&.+?;(\s|))", "", el)))
+        events.append({
+          'date': getEventDatetime(el, year),
+          'text': getFormattedEvent( eventType, getFormattedDate(el, year), re.sub(r"^\[{2}[a-zA-Z]*?\s[0-9]+\]{2}((\s|)–(\s|)|(\s|)&.+?;(\s|))", "", el))
+        })
   return events
  
 def getEventFromYear(year):
