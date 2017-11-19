@@ -25,8 +25,7 @@ class Event(Model):
   iteration = ForeignKeyField(Iteration, related_name='events')
   date = DateTimeField()
   text = TextField()
-  tweet_url = TextField(null=True)
-  tweeted_at = DateTimeField(null=True)
+  tweet_id = CharField(null=True)
   class Meta:
     database = db
 
@@ -49,15 +48,17 @@ def scheduledScript(sc, year):
     event = getEventFromYear(year)
     currentIteration = Iteration.select().order_by(Iteration.begin_at.desc()).get()
 
-    # Tweet the event if localMode is false in config
-    if config["main"]["localMode"] == False:
-      r = api.request('statuses/update', {'status': event[:config["twitter"]["maxChars"]]})
-    
-    Event(
+    dbEvent = Event(
       iteration = currentIteration,
       date = event['date'],
       text = event['text']
-    ).save()
+    )
+    # Tweet the event if localMode is false in config
+    if config["main"]["localMode"] == False:
+      r = api.request('statuses/update', {'status': event['text'][:config["twitter"]["maxChars"]]})
+      dbEvent.tweet_id = r.json()['id_str']
+
+    dbEvent.save()
 
     # Increment year for next iteration
     year = year + 1
