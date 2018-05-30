@@ -26,10 +26,10 @@ HELP_HELPER = \
 help: ##prints help
 	@perl -e '$(HELP_HELPER)' $(MAKEFILE_LIST)
 
-install: ##@install Install project's dependencies
-	@cp example.config.json config.json
+init: ##@install Install project's dependencies
+	@cp bob/config/example.config.json bob/config/config.json
 	@touch interations.db
 	@pip install -r requirements.txt
 
 start: ##@start Start the develoment bot
-	@python index.py
+	@python bob/main.py
