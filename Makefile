@@ -27,7 +27,9 @@ help: ##prints help
 	@perl -e '$(HELP_HELPER)' $(MAKEFILE_LIST)
 
 install: ##@install Install project's dependencies
+	@cp example.config.json config.json
+	@touch interations.db
 	@pip install -r requirements.txt
 
 start: ##@start Start the develoment bot
-	@echo "Start"
+	@python index.py
