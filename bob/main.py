@@ -10,29 +10,6 @@ from peewee import *
 with open('config.json', 'r') as f:
   config = json.load(f)
 
-# Database setup
-db = SqliteDatabase('iterations.db')
-
-class Iteration(Model):
-  number = IntegerField()
-  begin_at = DateTimeField()
-  end_at = DateTimeField(null=True)
-  colorCode = CharField(null=True)
-  class Meta:
-    database = db
-
-class Event(Model):
-  iteration = ForeignKeyField(Iteration, related_name='events')
-  date = DateTimeField()
-  text = TextField()
-  tweet_id = CharField(null=True)
-  class Meta:
-    database = db
-
-db.connect()
-if Iteration.table_exists() == False & Event.table_exists() == False:
-  db.create_tables([Iteration, Event])
-
 # Setup twitter api credentials
 api = TwitterAPI(config["twitter"]["consumer_key"], config["twitter"]["consumer_secret"], config["twitter"]["access_token_key"], config["twitter"]["access_token_secret"])
 # Set the current year

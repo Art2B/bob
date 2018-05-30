@@ -1,4 +1,4 @@
-config.json
+bob/config/config.json
 
 # Don't push database & log files
 *.db
