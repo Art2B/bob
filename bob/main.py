@@ -1,3 +1,4 @@
 from scheduled import Scheduler
 
-Scheduler.start()
+s = Scheduler()
+s.start()

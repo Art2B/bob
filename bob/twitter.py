@@ -2,7 +2,7 @@ from TwitterAPI import TwitterAPI
 
 from config import get as get_config
 
-config = config.get_config()
+config = get_config()
 
 # Setup twitter api credentials
 api = TwitterAPI(

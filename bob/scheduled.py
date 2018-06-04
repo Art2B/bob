@@ -10,7 +10,7 @@ import database as db
 from events import getEventFromYear
 from config import get as get_config
 
-config = config.get_config()
+config = get_config()
 
 class Scheduler:
     def __init__(self):
@@ -37,7 +37,7 @@ class Scheduler:
         else:
             self.startingYear = config["main"]["startingYear"]
 
-    def start():
+    def start(self):
         self.scheduler.enter(
             config['main']['scFrequency'],
             1,
@@ -46,10 +46,7 @@ class Scheduler:
         )
         self.scheduler.run()
 
-    def stop():
-        # To write
-
-    def script(sc, year):
+    def script(self, sc, year):
         if year <= self.currentYear:
             event = getEventFromYear(year)
             currentIteration = db.get_current_iteration()

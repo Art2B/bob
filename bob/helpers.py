@@ -14,8 +14,6 @@ def month_string_to_number(month):
         'dec': 12
     }
 
-    if isinstance(month, str) == False:
-        raise TypeError('Not a string')
     try:
         s = month.strip()[:3].lower()
         out = m[s]

@@ -17,7 +17,7 @@ class Event(Model):
     text = TextField()
     tweet_id = CharField(null=True)
     class Meta:
-        database = proxya
+        database = proxy
 
 def add_event(iteration, date, text, tweet_id):
     with proxy.atomic() as txn:
@@ -37,17 +37,18 @@ def add_iteration(number, begin_date):
 
 def get_current_iteration():
     with proxy.atomic() as txn:
-        return Iteration.select().order_by(Iteration.begin_at.desc()).get()
+        return Iteration.select() \
+                .order_by(Iteration.begin_at.desc()) \
+                .get()
 
 def get_last_event():
     with proxy.atomic() as txn:
         current_iteration = get_current_iteration()
-        return Event
-                .select(Event, Iteration)
-                .join(Iteration)
-                .where(Event.iteration == current_iteration)
-                .order_by(Event.date.desc())
-                .get()
+        return Event.select(Event, Iteration) \
+                .join(Iteration) \
+                .where(Event.iteration == current_iteration) \
+                .order_by(Event.date.desc()) \
+                .get() \
 
 def create_new_iteration():
     currentIteration = db.get_current_iteration()

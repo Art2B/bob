@@ -1,4 +1,4 @@
-.PHONY: install start
+.PHONY: init start
 .DEFAULT_GOAL := help
 
 # COLORS
