@@ -1,3 +1,4 @@
+from datetime import datetime
 from peewee import *
 
 proxy = Proxy()
@@ -40,9 +41,20 @@ def get_current_iteration():
 
 def get_last_event():
     with proxy.atomic() as txn:
+        current_iteration = get_current_iteration()
         return Event
                 .select(Event, Iteration)
                 .join(Iteration)
-                .where(Event.iteration == lastIteration)
+                .where(Event.iteration == current_iteration)
                 .order_by(Event.date.desc())
                 .get()
+
+def create_new_iteration():
+    currentIteration = db.get_current_iteration()
+    # Save end datetime of current iteration
+    currentIteration.end_at = datetime.now()
+    currentIteration.save()
+    # Create new iteration
+    # Find a more elegant way to do this with database configuration :)
+    newIterationNumber = currentIteration.number + 1
+    add_iteration(newIterationNumber, datetime.now())
