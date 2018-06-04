@@ -7,5 +7,8 @@ bob/config/config.json
 *.db
 *.log
 
+# Mac related files
+.DS_Store
+
 # Don't push db cache
 __pycache__
