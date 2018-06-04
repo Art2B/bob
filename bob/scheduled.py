@@ -15,7 +15,7 @@ config = get_config()
 class Scheduler:
     def __init__(self):
         # Database setup
-        iterationDB = pw.SqliteDatabase('iterations.db')
+        iterationDB = pw.SqliteDatabase('bob.db')
         iterationDB.connect()
         db.proxy.initialize(iterationDB)
         iterationDB.create_tables([db.Iteration, db.Event], safe=True)
