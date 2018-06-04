@@ -5,9 +5,9 @@ import json
 import re
 from helpers import month_string_to_number
 
-# Open config file
-with open('config.json', 'r') as f:
-  config = json.load(f)
+from config import get as get_config
+
+config = config.get_config()
 
 dateRegex = re.compile("^\[{2}([a-zA-Z]*?) ([0-9]+)\]{2}", re.M)
 

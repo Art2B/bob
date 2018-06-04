@@ -1,8 +1,8 @@
 from TwitterAPI import TwitterAPI
 
-# Open config file
-with open('config.json', 'r') as f:
-    config = json.load(f)
+from config import get as get_config
+
+config = config.get_config()
 
 # Setup twitter api credentials
 api = TwitterAPI(

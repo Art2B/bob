@@ -8,10 +8,9 @@ import peewee as pw
 from twitter import tweet
 import database as db
 from events import getEventFromYear
+from config import get as get_config
 
-# Open config file
-with open('config.json', 'r') as f:
-    config = json.load(f)
+config = config.get_config()
 
 class Scheduler:
     def __init__(self):
