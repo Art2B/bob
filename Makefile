@@ -27,6 +27,7 @@ help: ##prints help
 	@perl -e '$(HELP_HELPER)' $(MAKEFILE_LIST)
 
 init: ##@install Install project's dependencies
+	@sudo apt-get install python3-gpiozero
 	@cp bob/config/example.config.json bob/config/config.json
 	@touch interations.db
 	@pip3 install -r requirements.txt

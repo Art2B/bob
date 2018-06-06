@@ -2,3 +2,4 @@
 requests
 TwitterAPI
 peewee
+gpiozero
