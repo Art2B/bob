@@ -46,6 +46,13 @@ class Scheduler:
         )
         self.scheduler.run()
 
+    def start_new_world(self):
+        print("Start new world")
+        # End current iteration
+        # Tweet about end of world
+        # Generate new iteration
+        # start again
+
     def script(self, sc, year):
         if year <= self.currentYear:
             event = getEventFromYear(year)
