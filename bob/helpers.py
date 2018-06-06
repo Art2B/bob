@@ -1,3 +1,11 @@
+import json
+import requests
+import random
+
+from config import get as get_config
+
+config = get_config()
+
 def month_string_to_number(month):
     m = {
         'jan': 1,
@@ -20,3 +28,19 @@ def month_string_to_number(month):
         return out
     except:
         raise ValueError('Not a month')
+
+def get_explosion_gif():
+    r = requests.get(
+            config['giphy']['host'] +
+            config['giphy']['endpoints']['search'] +
+            '?api_key=' + config['giphy']['api_key'] +
+            '&q=nuclear explosion'
+        )
+    if r.status_code == 200:
+        data = json.loads(r.text)
+        gifs = data['data']
+        return random.choice(gifs)
+    else:
+        return {
+            url: ''
+        }

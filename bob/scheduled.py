@@ -1,9 +1,6 @@
 from datetime import date, datetime
 import time
 import sched
-import json
-import requests
-import random
 
 import peewee as pw
 
@@ -11,6 +8,7 @@ from twitter import tweet
 import database as db
 from events import getEventFromYear
 from config import get as get_config
+from helpers import get_explosion_gif
 
 config = get_config()
 
@@ -48,23 +46,12 @@ class Scheduler:
         )
         self.scheduler.run()
 
-    def get_explosion_gif(self):
-        r = requests.get(
-                config['giphy']['host'] +
-                config['giphy']['endpoints']['search'] +
-                '?api_key=' + config['giphy']['api_key'] +
-                '&q=nuclear explosion'
-            )
-        data = json.loads(r.text)
-        gifs = data['data']
-        return random.choice(gifs)
-
     def start_new_world(self):
         # End current iteration
         db.create_new_iteration()
         current_iteration = db.get_current_iteration()
         # Get explosion gif
-        gif = self.get_explosion_gif()
+        gif = get_explosion_gif()
         # Tweet about end of world
         tweet('World\'s destruction initiated.')
         tweet('3.')
@@ -93,4 +80,7 @@ class Scheduler:
         else:
             # End of this world iteration
             db.create_new_iteration()
+            tweet('World is over.')
+            tweet('Generating new world.')
+            tweet('World #' + str(current_iteration.number) + ' operational.')
             self.start()
