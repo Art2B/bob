@@ -29,7 +29,7 @@ help: ##prints help
 init: ##@install Install project's dependencies
 	@cp bob/config/example.config.json bob/config/config.json
 	@touch interations.db
-	@pip install -r requirements.txt
+	@pip3 install -r requirements.txt
 
 start: ##@start Start the develoment bot
-	@python bob/main.py
+	@python3 bob/main.py
