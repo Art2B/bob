@@ -1,8 +1,14 @@
-config.json
+bob/config/config.json
+
+# Python bitcode files
+*.pyc
 
 # Don't push database & log files
 *.db
 *.log
+
+# Mac related files
+.DS_Store
 
 # Don't push db cache
 __pycache__
