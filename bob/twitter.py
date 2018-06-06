@@ -14,6 +14,7 @@ api = TwitterAPI(
 
 def tweet(text):
     # Tweet the event if localMode is false in config
+    print('Tweet: ' + text)
     if config["main"]["localMode"] == False:
         r = api.request(
             'statuses/update',

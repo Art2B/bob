@@ -2,6 +2,8 @@ from datetime import date, datetime
 import time
 import sched
 import json
+import requests
+import random
 
 import peewee as pw
 
@@ -35,23 +37,44 @@ class Scheduler:
             lastEvent = db.get_last_event()
             self.startingYear = lastEvent.date.year + 1
         else:
-            self.startingYear = config["main"]["startingYear"]
+            self.startingYear = config['main']['startingYear']
 
-    def start(self):
+    def start(self, year = None):
         self.scheduler.enter(
             config['main']['scFrequency'],
             1,
             self.script,
-            (self.scheduler, self.startingYear)
+            (self.scheduler, year or self.startingYear)
         )
         self.scheduler.run()
 
+    def get_explosion_gif(self):
+        r = requests.get(
+                config['giphy']['host'] +
+                config['giphy']['endpoints']['search'] +
+                '?api_key=' + config['giphy']['api_key'] +
+                '&q=nuclear explosion'
+            )
+        data = json.loads(r.text)
+        gifs = data['data']
+        return random.choice(gifs)
+
     def start_new_world(self):
-        print("Start new world")
         # End current iteration
+        db.create_new_iteration()
+        current_iteration = db.get_current_iteration()
+        # Get explosion gif
+        gif = self.get_explosion_gif()
         # Tweet about end of world
-        # Generate new iteration
+        tweet('World\'s destruction initiated.')
+        tweet('3.')
+        tweet('2.')
+        tweet('1.')
+        tweet('Booom ! ' + gif['url'])
+        tweet('Generating new world.')
+        tweet('World #' + str(current_iteration.number) + ' operational.')
         # start again
+        self.start()
 
     def script(self, sc, year):
         if year <= self.currentYear:
@@ -65,21 +88,9 @@ class Scheduler:
                 event['text'],
                 tweet_id
             )
-
             # Increment year for next iteration
-            year = year + 1
-            self.scheduler.enter(
-                config['main']['scFrequency'],
-                1,
-                self.script,
-                (sc, year)
-            )
+            self.start(year + 1)
         else:
-            print('End of this world iteration')
+            # End of this world iteration
             db.create_new_iteration()
-            s.enter(
-                config['main']['scFrequency'],
-                1,
-                scheduledScript,
-                (sc, config["main"]["startingYear"])
-            )
+            self.start()

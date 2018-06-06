@@ -8,6 +8,13 @@
     "endpoint": "https://en.wikipedia.org/w/api.php",
     "urlParams": "?action=query&prop=revisions&rvprop=content&format=json&redirects&titles=AD_"
   },
+  "giphy": {
+    "host": "api.giphy.com",
+    "endpoints": {
+      "search": "/v1/gifs/search"
+    },
+    "api_key": "XXX"
+  },
   "twitter": {
     "consumer_key": "XXX",
     "consumer_secret": "XXX",

@@ -51,7 +51,7 @@ def get_last_event():
                 .get() \
 
 def create_new_iteration():
-    currentIteration = db.get_current_iteration()
+    currentIteration = get_current_iteration()
     # Save end datetime of current iteration
     currentIteration.end_at = datetime.now()
     currentIteration.save()
