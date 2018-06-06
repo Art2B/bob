@@ -6,10 +6,10 @@ config = get_config()
 
 # Setup twitter api credentials
 api = TwitterAPI(
-    config["twitter"]["consumer_key"],
-    config["twitter"]["consumer_secret"],
-    config["twitter"]["access_token_key"],
-    config["twitter"]["access_token_secret"]
+    config['twitter']['consumer_key'],
+    config['twitter']['consumer_secret'],
+    config['twitter']['access_token_key'],
+    config['twitter']['access_token_secret']
 )
 
 def tweet(text):
@@ -17,11 +17,11 @@ def tweet(text):
     if config['main']['verbose'] == True:
         print('Tweet: ' + text)
 
-    if config["main"]["localMode"] == False:
+    if config['main']['localMode'] == False:
         r = api.request(
             'statuses/update',
             {
-                'status': text[:config["twitter"]["maxChars"]]
+                'status': text[:config['twitter']['maxChars']]
             }
         )
         return r.json()['id_str']
