@@ -1,0 +1,8 @@
+{
+  "apps" : [{
+    "name": 'bob',
+    "script": "./bob/main.py",
+    "watch": true,
+    "exec_interpreter": "python3"
+  }]
+}

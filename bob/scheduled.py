@@ -56,11 +56,17 @@ class Scheduler:
         gif = get_explosion_gif()
         # Tweet about end of world
         tweet('World\'s destruction initiated.')
+        time.sleep(1)
         tweet('3.')
+        time.sleep(1)
         tweet('2.')
+        time.sleep(1)
         tweet('1.')
+        time.sleep(2)
         tweet('Booom ! ' + gif['url'])
+        time.sleep(5)
         tweet('Generating new world.')
+        time.sleep(5)
         tweet('World #' + str(current_iteration.number) + ' operational.')
         # start again
         self.start()
@@ -83,6 +89,8 @@ class Scheduler:
             # End of this world iteration
             db.create_new_iteration()
             tweet('World is over.')
+            time.sleep(1)
             tweet('Generating new world.')
+            time.sleep(5)
             tweet('World #' + str(current_iteration.number) + ' operational.')
             self.start()
