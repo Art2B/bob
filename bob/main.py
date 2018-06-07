@@ -3,10 +3,10 @@ from signal import pause
 
 from scheduled import Scheduler
 
-button = Button(2)
-
+print('Historian bob setting up.')
 s = Scheduler()
-s.start()
+button = Button(2)
+button.when_released = s.start_new_world
 
-button.when_pressed = s.start_new_world 
-pause()
+print('Historian bob launched.')
+s.start()
