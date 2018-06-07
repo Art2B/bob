@@ -41,6 +41,14 @@ def get_current_iteration():
                 .order_by(Iteration.begin_at.desc()) \
                 .get()
 
+def get_events_number_for_iteration(iteration = None):
+    with proxy.atomic() as txn:
+        target_iteration = iteration or get_current_iteration()
+        return Event.select(Event, Iteration) \
+                .join(Iteration) \
+                .where(Event.iteration == target_iteration) \
+                .count()
+
 def get_last_event():
     with proxy.atomic() as txn:
         current_iteration = get_current_iteration()
@@ -48,7 +56,7 @@ def get_last_event():
                 .join(Iteration) \
                 .where(Event.iteration == current_iteration) \
                 .order_by(Event.date.desc()) \
-                .get() \
+                .get()
 
 def create_new_iteration():
     currentIteration = get_current_iteration()

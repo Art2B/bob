@@ -24,18 +24,7 @@ class Scheduler:
         if db.Iteration.select().count() == 0:
             db.add_iteration(1, datetime.now())
 
-        # Set scheduler
-        self.scheduler = sched.scheduler(time.time, time.sleep)
-
-        # Set current year
-        self.currentYear = date.today().year + 1
-
-        # Retrieve starting year at launch and allow script to start where it stops
-        if db.Event.select().count() > 0:
-            lastEvent = db.get_last_event()
-            self.startingYear = lastEvent.date.year + 1
-        else:
-            self.startingYear = config['main']['startingYear']
+        self.reset()
 
     def start(self, year = None):
         self.scheduler.enter(
@@ -46,9 +35,22 @@ class Scheduler:
         )
         self.scheduler.run()
 
+    def reset(self):
+        # Set scheduler
+        self.scheduler = sched.scheduler(time.time, time.sleep)
+        self.currentYear = date.today().year + 1
+
+        if db.get_events_number_for_iteration() > 0:
+            lastEvent = db.get_last_event()
+            self.startingYear = lastEvent.date.year + 1
+        else:
+            self.startingYear = config['main']['startingYear']
+
+
     def start_new_world(self):
         # End current iteration
         db.create_new_iteration()
+        self.reset()
         current_iteration = db.get_current_iteration()
         # Get explosion gif
         gif = get_explosion_gif()
