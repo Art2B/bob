@@ -21,7 +21,12 @@
     "consumer_secret": "XXX",
     "access_token_key": "XXX",
     "access_token_secret": "XXX",
-    "maxChars": 280
+    "maxChars": 280,
+    "baseName": "Historian Bob",
+    "profile_picture": {
+      "width": 400,
+      "height": 400
+    }
   },
   "formatting": {
     "typesHandled": ["events", "births", "deaths", "nobel prizes"],
