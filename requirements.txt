@@ -3,3 +3,4 @@ requests
 TwitterAPI
 peewee
 gpiozero
+git+https://github.com/kevinwuhoo/randomcolor-py

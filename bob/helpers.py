@@ -2,6 +2,8 @@ import json
 import requests
 import random
 
+import randomcolor
+
 from config import get as get_config
 
 config = get_config()
@@ -44,3 +46,7 @@ def get_explosion_gif():
         return {
             url: ''
         }
+
+def get_random_palette(nb_colors):
+    rand_color = randomcolor.RandomColor()
+    return rand_color.generate(count=nb_colors)
