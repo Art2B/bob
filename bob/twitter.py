@@ -40,15 +40,3 @@ def udpate_name(iteration_number):
             }
         )
         return r.json()
-
-def update_profile_pic(base64Picture):
-    if config['main']['verbose'] == True:
-        print('Twitter.py - Update profile picture')
-
-    if config['main']['localMode'] == False:
-        r = api.request(
-            'account/update_profile_image',
-            {
-                'image': base64Picture
-            }
-        )

@@ -4,7 +4,7 @@ import sched
 
 import peewee as pw
 
-from twitter import tweet
+from twitter import tweet, udpate_name
 import database as db
 from events import getEventFromYear
 from config import get as get_config
@@ -52,6 +52,7 @@ class Scheduler:
         db.create_new_iteration()
         self.reset()
         current_iteration = db.get_current_iteration()
+        udpate_name(current_iteration.number)
         # Get explosion gif
         gif = get_explosion_gif()
         # Tweet about end of world
@@ -88,9 +89,11 @@ class Scheduler:
         else:
             # End of this world iteration
             db.create_new_iteration()
+            currentIteration = db.get_current_iteration()
             tweet('World is over.')
             time.sleep(1)
             tweet('Generating new world.')
             time.sleep(5)
             tweet('World #' + str(current_iteration.number) + ' operational.')
+            udpate_name(current_iteration.number)
             self.start()
